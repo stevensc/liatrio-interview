@@ -3,6 +3,7 @@ resource "google_project_service" "artifactregistry" {
 }
 
 resource "google_artifact_registry_repository" "docker-repo" {
+  depends_on = [google_project_service.artifactregistry]
   location      = var.gcp_region
   repository_id = "docker-images"
   description   = "Repository for images running on k8s"
