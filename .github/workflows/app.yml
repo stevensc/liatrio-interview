@@ -43,7 +43,7 @@ jobs:
     - name: Build with Maven
       run: mvn -B package --file api/pom.xml
 
-    - run: gcloud --quiet auth configure-docker gcr.io
+    - run: gcloud --quiet auth configure-docker us-central1-docker.pkg.dev
 
     - name: Build Docker image
       run: docker build --file Dockerfile --tag "$REGION-docker.pkg.dev/$PROJECT_ID/$REPO/$IMAGE:$GITHUB_SHA" .
