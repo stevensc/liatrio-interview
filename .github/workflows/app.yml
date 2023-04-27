@@ -15,7 +15,7 @@ on:
     branches: [ "main" ]
 
 env:
-  PROJECT_ID: ${{ secrets.GKE_PROJECT }}
+  PROJECT_ID: liatrio-interview-26042023
   REGION: us-central1
   REPO: docker-images
   IMAGE: api
@@ -43,7 +43,7 @@ jobs:
     - name: Build with Maven
       run: mvn -B package --file api/pom.xml
 
-    - run: gcloud --quiet auth configure-docker
+    - run: gcloud --quiet auth configure-docker gcr.io
 
     - name: Build Docker image
       run: docker build --file Dockerfile --tag "$REGION-docker.pkg.dev/$PROJECT_ID/$REPO/$IMAGE:$GITHUB_SHA" .
