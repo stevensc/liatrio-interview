@@ -14,13 +14,34 @@ on:
   pull_request:
     branches: [ "main" ]
 
+env:
+  PROJECT_ID: ${{ secrets.GKE_PROJECT }}
+  GKE_CLUSTER: cluster-1    # Add your cluster name here.
+  GKE_ZONE: us-central1-c   # Add your cluster zone here.
+  IMAGE: api
+
 jobs:
-  build:
+  setup-build-publish:
 
     runs-on: ubuntu-latest
 
     steps:
+    - name: Checkout
     - uses: actions/checkout@v3
+
+    - uses: google-github-actions/setup-gcloud@1bee7de035d65ec5da40a31f8589e240eba8fde5
+      with:
+        service_account_key: ${{ secrets.TF_API_TOKEN }}
+        project_id: ${{ secrets.GKE_PROJECT }}
+
+    - run: |-
+        gcloud --quiet auth configure-docker
+
+    - uses: google-github-actions/get-gke-credentials@db150f2cc60d1716e61922b832eae71d2a45938f
+      with:
+        cluster_name: ${{ env.GKE_CLUSTER }}
+        location: ${{ env.GKE_ZONE }}
+        credentials: ${{ secrets.TF_API_TOKEN }}
 
     - name: Get current date in seconds
       run: echo "TIME_STAMP=$(date +%s)" >> $GITHUB_ENV
@@ -35,28 +56,14 @@ jobs:
     - name: Build with Maven
       run: mvn -B package --file api/pom.xml
 
-    - name: Login to GCP artifact registry 
-      uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
-      with:
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
+    - name: Build Docker image
+      run: |-
+        docker build . --file Dockerfile \
+          --tag "gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA" \
+          --build-arg GITHUB_SHA="$GITHUB_SHA" \
+          --build-arg GITHUB_REF="$GITHUB_REF" \
+          .
 
-    - name: Extract metadata (tags, labels) for Docker
-      id: meta
-      uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
-      with:
-        images: us-central1-docker.pkg.dev/liatrio-interview-26042023/docker-images
-
-    - name: Build and push Docker image
-      uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
-      with:
-        context: .
-        push: true
-        tags: ${{ steps.meta.outputs.tags }}
-        labels: ${{ steps.meta.outputs.labels }}
-
-#    - name: Build Docker image
-#      run: docker build . --file Dockerfile --tag api:$TIME_STAMP
-
-#    - name: Upload to GCP artifact registry
-#      run: docker login -u docker push us-central1-docker.pkg.dev/liatrio-interview-26042023/docker-images/api:$TIME_STAMP
+    - name: Publish
+      run: |-
+        docker push "gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA"
