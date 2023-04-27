@@ -19,9 +19,11 @@ terraform {
 }
 
 provider "google" {
-  credentials = var.gcp_credentials
+    project       = var.gcp_project_id
+    credentials = var.gcp_credentials
 }
 
 provider "google-beta" {
-  credentials = var.gcp_credentials
+    project       = var.gcp_project_id
+    credentials = var.gcp_credentials
 }
