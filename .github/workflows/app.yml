@@ -16,8 +16,7 @@ on:
 
 env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT }}
-  GKE_CLUSTER: cluster-1    # Add your cluster name here.
-  GKE_ZONE: us-central1-c   # Add your cluster zone here.
+  $REPO: us-central1-docker.pkg.dev/liatrio-interview-26042023/docker-images
   IMAGE: api
 
 jobs:
@@ -53,11 +52,11 @@ jobs:
     - name: Build Docker image
       run: |-
         docker build --file Dockerfile \
-          --tag "gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA" \
+          --tag "$REPO/$IMAGE:$GITHUB_SHA" \
           --build-arg GITHUB_SHA="$GITHUB_SHA" \
           --build-arg GITHUB_REF="$GITHUB_REF" \
           .
 
     - name: Publish
       run: |-
-        docker push "gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA"
+        docker push "$REPO/$PROJECT_ID/$IMAGE:$GITHUB_SHA"
