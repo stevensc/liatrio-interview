@@ -1,6 +1,6 @@
 provider "google" {
-  project     = "liatrio-interview-26042023"
+  project     = var.gcp_project_id
   credentials = var.gcp_credentials
-  region      = "us-central1"
-  zone        = "us-central1-c
+  region      = var.gcp_region
+  zone        = var.gcp_zone
 }
