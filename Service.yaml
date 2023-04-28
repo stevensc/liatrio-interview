@@ -1,0 +1,7 @@
+spec:
+  type: LoadBalancer
+  selector:
+    app: liatrio-demo
+  ports:
+  - port: 8080
+    targetPort: 8080
