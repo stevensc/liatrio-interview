@@ -9,6 +9,9 @@ terraform {
       source  = "hashicorp/google-beta"
       version = ">= 4.27"
     }
+    kubernetes = {
+      source = "hashicorp/kubernetes"
+    }    
   }
   cloud {
     organization = "Liatrio-demo-cstevens"
@@ -26,4 +29,10 @@ provider "google" {
 provider "google-beta" {
     project       = var.gcp_project_id
     credentials = var.gcp_credentials
+}
+
+provider "kubernetes" {
+  host                   = "https://${module.gke.endpoint}"
+  token                  = data.google_client_config.default.access_token
+  cluster_ca_certificate = base64decode(module.gke.ca_certificate)
 }

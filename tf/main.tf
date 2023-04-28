@@ -1,4 +1,3 @@
-
 # Had to enable manually.  Can be done automatically on project creation if using GCP organizations
 resource "google_project_service" "cloudresourcemanager" {
   service = "cloudresourcemanager.googleapis.com"
