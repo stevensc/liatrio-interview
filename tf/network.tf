@@ -1,4 +1,6 @@
 module "gcp-network" {
+  depends_on = [google_project_service.compute]
+
   source  = "terraform-google-modules/network/google"
   version = ">= 4.0.1"
 
