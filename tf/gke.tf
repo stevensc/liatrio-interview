@@ -29,7 +29,7 @@ module "gke" {
 
   master_authorized_networks = [
     {
-      cidr_block   = "10.60.0.0/17"
+      cidr_block   = "0.0.0.0/"
       display_name = "VPC"
     },
   ]
