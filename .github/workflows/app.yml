@@ -37,7 +37,7 @@ jobs:
       run: gcloud --quiet auth configure-docker us-central1-docker.pkg.dev
     
     - name: gcloud k8s plugin install
-      run: apt-get update && \
+      run: sudo apt-get update && \
            apt-get install google-cloud-sdk-gke-gcloud-auth-plugin
 
     - name: Build Docker image
