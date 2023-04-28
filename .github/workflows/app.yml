@@ -8,7 +8,7 @@ on:
 
 env:
   DEPLOYMENT: liatrio-demo
-  TAG: ${{ vars.REGION }}-docker.pkg.dev/${{ vars.PROJECT_ID }}/${{ vars.REPO }}/${{ vars.IMAGE }}:$GITHUB_SHA
+  TAG: ${{ vars.REGION }}-docker.pkg.dev/${{ vars.PROJECT_ID }}/${{ vars.REPO }}/${{ vars.IMAGE }}:${{ vars.GITHUB_SHA }}
 
 jobs:
   setup-build-publish:
@@ -39,7 +39,7 @@ jobs:
       run: docker build --file Dockerfile --tag "$TAG" .
 
     - name: Publish
-      run: docker push "$REGION-docker.pkg.dev/$PROJECT_ID/$REPO/$IMAGE:$GITHUB_SHA"
+      run: docker push "$TAG"
 
     - name: Deployment
       run: kubectl apply -f Deployment.yaml
