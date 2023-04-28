@@ -41,8 +41,22 @@ jobs:
     - name: Publish
       run: docker push "$TAG:$GITHUB_SHA"
 
-    - name: Service
-      run: kubectl apply -f Service.yaml
+    # Set up kustomize
+    - name: Set up Kustomize
+      run: |-
+        curl -sfLo kustomize https://github.com/kubernetes-sigs/kustomize/releases/download/v3.1.0/kustomize_3.1.0_linux_amd64
+        chmod u+x ./kustomize
 
-    - name: Deployment
-      run: kubectl apply -f Deployment.yaml
+    # Deploy the Docker image to the GKE cluster
+    - name: Deploy
+      run: |-
+        ./kustomize edit set $TAG:$GITHUB_SHA
+        ./kustomize build . | kubectl apply -f -
+        kubectl rollout status deployment/$DEPLOYMENT_NAME
+        kubectl get services -o wide
+
+#    - name: Service
+#      run: kubectl apply -f Service.yaml
+
+#    - name: Deployment
+#      run: kubectl apply -f Deployment.yaml
