@@ -41,8 +41,8 @@ jobs:
     - name: Publish
       run: docker push "$TAG:$GITHUB_SHA"
 
-    - name: Deployment
-      run: kubectl apply -f Deployment.yaml
-
     - name: Service
       run: kubectl apply -f Service.yaml
+
+    - name: Deployment
+      run: kubectl apply -f Deployment.yaml

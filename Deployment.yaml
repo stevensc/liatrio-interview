@@ -1,6 +1,6 @@
 spec:
   containers:
-  - name: LIATRIO-DEMO
+  - name: liatrio-demo
     image: ${{ vars.REGION }}-docker.pkg.dev/${{ vars.PROJECT_ID }}/${{ vars.REPO }}/${{ vars.IMAGE }}:$GITHUB_SHA
     ports:
     - containerPort: 8080
