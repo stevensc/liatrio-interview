@@ -11,7 +11,7 @@ locals {
 data "google_client_config" "default" {}
 
 module "gke" {
-  depends_on = [module.gcp-network]
+  depends_on = [module.gcp-network,google_project_service.container]
   source                          = "terraform-google-modules/kubernetes-engine/google//modules/beta-autopilot-private-cluster"
   project_id                      = var.gcp_project_id
   name                            = "${local.cluster_type}-cluster"
