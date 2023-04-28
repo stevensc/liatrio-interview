@@ -17,6 +17,7 @@ module "gke" {
   name                            = "${local.cluster_type}-cluster"
   regional                        = true
   region                          = var.gcp_region
+  zones                           = [us-central1-a us-central1-b us-central1-c]
   network                         = module.gcp-network.network_name
   subnetwork                      = local.subnet_names[index(module.gcp-network.subnets_names, local.subnet_name)]
   ip_range_pods                   = local.pods_range_name
