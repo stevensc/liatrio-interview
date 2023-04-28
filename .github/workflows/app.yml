@@ -11,6 +11,7 @@ env:
   REGION: us-central1
   REPO: docker-images
   IMAGE: api
+  TAG: $REGION-docker.pkg.dev/$PROJECT_ID/$REPO/$IMAGE:$GITHUB_SHA
 
 jobs:
   setup-build-publish:
@@ -42,3 +43,17 @@ jobs:
 
     - name: Publish
       run: docker push "$REGION-docker.pkg.dev/$PROJECT_ID/$REPO/$IMAGE:$GITHUB_SHA"
+
+    # Set up kustomize
+    - name: Set up Kustomize
+      run: |-
+        curl -sfLo kustomize https://github.com/kubernetes-sigs/kustomize/releases/download/v3.1.0/kustomize_3.1.0_linux_amd64
+        chmod u+x ./kustomize
+
+    # Deploy the Docker image to the GKE cluster
+    - name: Deploy
+      run: |-
+        ./kustomize edit set image $REGION-docker.pkg.dev/$PROJECT_ID/$REPO/$IMAGE:$GITHUB_SHA
+        ./kustomize build . | kubectl apply -f -
+        kubectl rollout status deployment/liatrio-demo
+        kubectl get services -o wide
