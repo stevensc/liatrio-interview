@@ -23,6 +23,8 @@ jobs:
       with:
         credentials_json: ${{ secrets.TF_API_TOKEN }}
 
+    - name: add package manager
+      run: echo "deb https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
     - name: update
       run: sudo apt-get update
     - name: install plugin
