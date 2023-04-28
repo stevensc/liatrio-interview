@@ -18,7 +18,7 @@ resource "google_project_service" "compute" {
 
 resource "google_project_service" "container" {
   depends_on = [google_project_service.cloudresourcemanager]
-  service = "compute.googleapis.com"
+  service = "container.googleapis.com"
   disable_on_destroy = false
 }
 
