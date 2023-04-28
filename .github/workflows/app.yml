@@ -33,7 +33,11 @@ jobs:
     - name: Build with Maven
       run: mvn -B package --file api/pom.xml
 
-    - run: gcloud --quiet auth configure-docker us-central1-docker.pkg.dev
+    - name: gcloud auth
+      run: gcloud --quiet auth configure-docker us-central1-docker.pkg.dev
+    
+    - name: gcloud k8s plugin install
+      run: gcloud components install gke-gcloud-auth-plugin
 
     - name: Build Docker image
       run: docker build --file Dockerfile --tag "$TAG:$GITHUB_SHA" .
