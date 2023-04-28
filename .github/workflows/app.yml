@@ -7,11 +7,8 @@ on:
     branches: [ "main" ]
 
 env:
-  PROJECT_ID: liatrio-interview-26042023
-  REGION: us-central1
-  REPO: docker-images
-  IMAGE: api
-  TAG: $REGION-docker.pkg.dev/$PROJECT_ID/$REPO/$IMAGE:$GITHUB_SHA
+  DEPLOYMENT: liatrio-demo
+  TAG: ${{ vars.REGION }}-docker.pkg.dev/${{ vars.PROJECT_ID }}/${{ vars.REPO }}/${{ vars.IMAGE }}:$GITHUB_SHA
 
 jobs:
   setup-build-publish:
@@ -39,21 +36,13 @@ jobs:
     - run: gcloud --quiet auth configure-docker us-central1-docker.pkg.dev
 
     - name: Build Docker image
-      run: docker build --file Dockerfile --tag "$REGION-docker.pkg.dev/$PROJECT_ID/$REPO/$IMAGE:$GITHUB_SHA" .
+      run: docker build --file Dockerfile --tag "$TAG" .
 
     - name: Publish
       run: docker push "$REGION-docker.pkg.dev/$PROJECT_ID/$REPO/$IMAGE:$GITHUB_SHA"
 
-    # Set up kustomize
-    - name: Set up Kustomize
-      run: |-
-        curl -sfLo kustomize https://github.com/kubernetes-sigs/kustomize/releases/download/v3.1.0/kustomize_3.1.0_linux_amd64
-        chmod u+x ./kustomize
+    - name: Deployment
+      run: kubectl apply -f Deployment.yaml
 
-    # Deploy the Docker image to the GKE cluster
-    - name: Deploy
-      run: |-
-        ./kustomize edit set image $REGION-docker.pkg.dev/$PROJECT_ID/$REPO/$IMAGE:$GITHUB_SHA
-        ./kustomize build . | kubectl apply -f -
-        kubectl rollout status deployment/liatrio-demo
-        kubectl get services -o wide
+    - name: Service
+      run: kubectl apply -f Service.yaml
