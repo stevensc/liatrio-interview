@@ -57,5 +57,11 @@ jobs:
     - name: create deployment
       run: kubectl create deployment $DEPLOYMENT --image=$TAG:$GITHUB_SHA
 
+    - name: set replicas
+      run: kubectl scale deployment $DEPLOYMENT --replicas=1
+
+    - name: set horizontal autoscaler
+      run: kubectl autoscale deployment $DEPLOYMENT --cpu-percent=80 --min=1 --max=2
+
     - name: expose service
       run: kubectl expose deployment $DEPLOYMENT --name=$DEPLOYMENT-service --type=LoadBalancer --port 8080 --target-port 8080
