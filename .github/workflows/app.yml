@@ -52,7 +52,7 @@ jobs:
       run: docker push "$TAG:$GITHUB_SHA"
 
     - name: k8s auth
-      run: gcloud container clusters get-credentials simple-autopilot-private-cluster --region ${{ vars.REGION }}
+      run: gcloud container clusters get-credentials simple-autopilot-cluster --region ${{ vars.REGION }}
 
     - name: create deployment
       run: kubectl create deployment $DEPLOYMENT --image=$TAG:$GITHUB_SHA
