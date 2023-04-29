@@ -21,6 +21,7 @@ module "gke" {
   ip_range_services          = local.svc_range_name
   horizontal_pod_autoscaling = true
   enable_vertical_pod_autoscaling = true  
+  grant_registry_access	= true
 }
 
 module "gcp-network" {
