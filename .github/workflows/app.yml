@@ -55,9 +55,6 @@ jobs:
     - name: k8s auth
       run: gcloud container clusters get-credentials $CLUSTER --region ${{ vars.REGION }}
 
-    - name: ls
-      run: ls
-
     - name: apply deployment
       run: kubectl apply -f deployment.yaml
 
