@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-deployment
+  labels:
+    app: api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api
+  template:
+    metadata:
+      labels:
+        app: api
+    spec:
+      terminationGracePeriodSeconds: 30
+      containers:
+      - name: api
+        image: us-central1-docker.pkg.dev/liatrio-interview-26042023/docker-images/api:latest
+        imagePullPolicy: "Always"
+        ports:
+        - containerPort: 8080

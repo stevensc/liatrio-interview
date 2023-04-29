@@ -8,7 +8,8 @@ on:
 
 env:
   DEPLOYMENT: liatrio-demo
-  TAG: ${{ vars.REGION }}-docker.pkg.dev/${{ vars.PROJECT_ID }}/${{ vars.REPO }}/${{ vars.IMAGE }}
+  CLUSTER: simple-autopilot-cluster
+  REPO: ${{ vars.REGION }}-docker.pkg.dev/${{ vars.PROJECT_ID }}/${{ vars.REPO }}/${{ vars.IMAGE }}
 
 jobs:
   setup-build-publish:
@@ -46,22 +47,16 @@ jobs:
       run: gcloud --quiet auth configure-docker us-central1-docker.pkg.dev
 
     - name: Build Docker image
-      run: docker build --file Dockerfile --tag "$TAG:$GITHUB_SHA" .
+      run: docker build --file Dockerfile -t "$REPO:$GITHUB_SHA" -t "$REPO:latest" .
 
     - name: Publish
-      run: docker push "$TAG:$GITHUB_SHA"
+      run: docker push --all-tags "$REPO"
 
     - name: k8s auth
-      run: gcloud container clusters get-credentials simple-autopilot-cluster --region ${{ vars.REGION }}
+      run: gcloud container clusters get-credentials $CLUSTER --region ${{ vars.REGION }}
 
-    - name: create deployment
-      run: kubectl create deployment $DEPLOYMENT --image=$TAG:$GITHUB_SHA
+    - name: apply deployment
+      run: kubectl apply -f deployment.yaml
 
-    - name: set replicas
-      run: kubectl scale deployment $DEPLOYMENT --replicas=1
-
-    - name: set horizontal autoscaler
-      run: kubectl autoscale deployment $DEPLOYMENT --cpu-percent=80 --min=1 --max=2
-
-    - name: expose service
-      run: kubectl expose deployment $DEPLOYMENT --name=$DEPLOYMENT-service --type=LoadBalancer --port 8080 --target-port 8080
+    - name: apply service
+      run: kubectl apply -f service.yaml

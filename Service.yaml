@@ -1,7 +1,12 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: api-service
 spec:
-  type: LoadBalancer
   selector:
-    app: liatrio-demo
+    deployment: api
+  type: LoadBalancer
   ports:
-  - port: 8080
+  - protocol: TCP
+    port: 8080
     targetPort: 8080
