@@ -8,8 +8,6 @@ locals {
   subnet_names           = [for subnet_self_link in module.gcp-network.subnets_self_links : split("/", subnet_self_link)[length(split("/", subnet_self_link)) - 1]]
 }
 
-data "google_client_config" "default" {}
-
 module "gke" {
   depends_on = [module.gcp-network,google_project_service.container]
   source                          = "terraform-google-modules/kubernetes-engine/google//modules/beta-autopilot-private-cluster"
