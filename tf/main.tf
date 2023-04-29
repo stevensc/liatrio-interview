@@ -33,3 +33,5 @@ resource "google_artifact_registry_repository" "docker-repo" {
     immutable_tags = true
   }
 }
+
+data "google_client_config" "default" {}

@@ -59,9 +59,3 @@ jobs:
 
     - name: expose service
       run: kubectl expose deployment $DEPLOYMENT --name=$DEPLOYMENT-service --type=LoadBalancer --port 8080 --target-port 8080
-
-#    - name: Service
-#      run: kubectl apply -f Service.yaml
-
-#    - name: Deployment
-#      run: kubectl apply -f Deployment.yaml
