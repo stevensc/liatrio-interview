@@ -1,3 +1,13 @@
+locals {
+  cluster_type           = "simple-autopilot-private"
+  network_name           = "simple-autopilot-private-network"
+  subnet_name            = "simple-autopilot-private-subnet"
+  master_auth_subnetwork = "simple-autopilot-private-master-subnet"
+  pods_range_name        = "ip-range-pods-simple-autopilot-private"
+  svc_range_name         = "ip-range-svc-simple-autopilot-private"
+  subnet_names           = [for subnet_self_link in module.gcp-network.subnets_self_links : split("/", subnet_self_link)[length(split("/", subnet_self_link)) - 1]]
+}
+
 module "gcp-network" {
   depends_on = [google_project_service.compute]
 
