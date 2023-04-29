@@ -4,7 +4,7 @@ metadata:
   name: api-service
 spec:
   selector:
-    deployment: api
+    deployment: api-deployment
   type: LoadBalancer
   ports:
   - protocol: TCP
