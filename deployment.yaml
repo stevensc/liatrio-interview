@@ -8,11 +8,11 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: api
+      app.kubernetes.io/name: api
   template:
     metadata:
       labels:
-        app: api
+        app.kubernetes.io/name: api
     spec:
       terminationGracePeriodSeconds: 30
       containers:
