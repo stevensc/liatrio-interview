@@ -3,16 +3,9 @@ kind: Deployment
 metadata:
   name: api-deployment
   labels:
-    app: api
+    app.kubernetes.io/name: api
 spec:
   replicas: 1
-  selector:
-    matchLabels:
-      app: api
-  template:
-    metadata:
-      labels:
-        app: api
     spec:
       terminationGracePeriodSeconds: 30
       containers:

@@ -4,7 +4,7 @@ metadata:
   name: api-service
 spec:
   selector:
-    deployment: api-deployment
+    app.kubernetes.io/name: api
   type: LoadBalancer
   ports:
   - protocol: TCP
