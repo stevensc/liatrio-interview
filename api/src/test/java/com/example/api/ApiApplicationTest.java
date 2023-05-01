@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-public class ApiApplicationTests {
+public class ApiApplicationTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -32,16 +32,17 @@ public class ApiApplicationTests {
 
     @Test
     public void testGetApiResponse() throws Exception {
-        MvcResult result = mockMvc.perform(get("/api").accept(MediaType.APPLICATION_JSON))
+        MvcResult result = mockMvc.perform(get("/api")
+                .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
 
         String content = result.getResponse().getContentAsString();
         Map<String, Object> responseMap = objectMapper.readValue(content, new TypeReference<Map<String, Object>>(){});
-        Assert.isTrue(false, "key not fun");
+        Assert.isTrue(responseMap.containsKey("trash"), "key not fun");
+//        assertThat(responseMap.("message").isEqualTo("Automate all the things!");
         assert(responseMap.containsKey("timestamp"));
-//        Assert.isFalse(responseMap.containsKey("trash"), "key not fun");
         
     }
 }
