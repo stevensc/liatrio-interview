@@ -25,14 +25,14 @@ class ApiApplicationTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private ApiApplication apiController;
+    private ApiApplication apiApplication;
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
     @BeforeEach
     public void setup() {
         Map<String, Object> response = Map.of("message", "Automate all the things!", "timestamp", 1529729125);
-        when(apiController.getApiResponse()).thenReturn(response);
+        when(apiApplication.getApiResponse()).thenReturn(response);
     }
 
     @Test
