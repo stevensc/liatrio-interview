@@ -40,8 +40,7 @@ public class ApiApplicationTest {
 
         String content = result.getResponse().getContentAsString();
         Map<String, Object> responseMap = objectMapper.readValue(content, new TypeReference<Map<String, Object>>(){});
-        Assert.isTrue(responseMap.containsKey("trash"), "key not fun");
-//        assertThat(responseMap.("message").isEqualTo("Automate all the things!");
+        Assert.isTrue(responseMap.containsKey("message"), "key not fun");
         assert(responseMap.containsKey("timestamp"));
         
     }
