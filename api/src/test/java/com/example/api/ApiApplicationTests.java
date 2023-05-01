@@ -12,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.util.Assert;
 
 import java.util.Map;
 
@@ -39,7 +40,7 @@ public class ApiApplicationTests {
         String content = result.getResponse().getContentAsString();
         Map<String, Object> responseMap = objectMapper.readValue(content, new TypeReference<Map<String, Object>>(){});
 
-        Assert.isTrue(responseMap.containsKey("messages"));
+        Assert.isTrue(responseMap.containsKey("messages"), "key not fun");
         assert(responseMap.containsKey("timestamp"));
     }
 }
