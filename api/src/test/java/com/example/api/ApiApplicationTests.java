@@ -39,8 +39,9 @@ public class ApiApplicationTests {
 
         String content = result.getResponse().getContentAsString();
         Map<String, Object> responseMap = objectMapper.readValue(content, new TypeReference<Map<String, Object>>(){});
-
-        Assert.isFalse(responseMap.containsKey("trash"), "key not fun");
+        Assert.isTrue(false, "key not fun");
         assert(responseMap.containsKey("timestamp"));
+//        Assert.isFalse(responseMap.containsKey("trash"), "key not fun");
+        
     }
 }
