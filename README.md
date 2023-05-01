@@ -4,11 +4,10 @@
 |----------------------|
 |           Spring Boot|
 |                JRE 17|
-|       Terraform Cloud|
-|         GKE Autopilot|
 |        GitHub Actions|
-
-
+|       Terraform Cloud|
+|     Artifact Registry|
+|         GKE Autopilot|
 
 ## Prerequisites
     In order to run this, you will need to have a Terraform Cloud and GCP account already created.  
@@ -21,4 +20,7 @@
     These can be moved to other locations like a variables file in Terraform. 
 
 ## Deploying
-    If running from this repository, all that will be needed is to create a new pull request to "main" branch with your changes.  This will trigger TF runs and GitHib actions.
+    If running from this repository, all that will be needed is to create a new pull request to the "main" branch with your changes.  This will trigger the TF run and GitHib action.
+
+## Cleanup
+    Issuing a Destroy Plan through Terraform Cloud should destroy all resources created. Deleting the GCP account should cleanup the rest. The rest would be to delete the GitHub repositroy.
