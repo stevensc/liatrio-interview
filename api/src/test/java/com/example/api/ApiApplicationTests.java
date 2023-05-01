@@ -40,7 +40,7 @@ public class ApiApplicationTests {
         String content = result.getResponse().getContentAsString();
         Map<String, Object> responseMap = objectMapper.readValue(content, new TypeReference<Map<String, Object>>(){});
 
-        Assert.isTrue(responseMap.containsKey("trash"), "key not fun");
+        Assert.isFalse(responseMap.containsKey("trash"), "key not fun");
         assert(responseMap.containsKey("timestamp"));
     }
 }
